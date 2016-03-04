@@ -1,9 +1,15 @@
 <resources>
-    <string name="app_name">GithubFragmentApplication</string>
+    <string name="app_name">Github App</string>
     <string name="action_settings">Settings</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="user_button_text">Followers</string>
 
     <string name="follower_list_title">%s\'s Followers</string>
+    <string name="login">Please Login</string>
+    <string name="enter_user_name">Enter User Name</string>
+    <string name="login_word">Login</string>
+    <string name="user_error">User Does Not Exist</string>
+    <string name="toast_no_internet">Get An Internet</string>
+    <string name="app_title">Github App</string>
 </resources>

@@ -1,5 +1,8 @@
 package edu.lclark.githubfragmentapplication.fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -88,8 +92,14 @@ public class MainActivityFragment extends Fragment implements NetworkAsyncTask.G
         super.onStart();
 
         if (mAsyncTask == null && (mFollowers == null || mFollowers.isEmpty())) {
-            mAsyncTask = new NetworkAsyncTask(this);
-            mAsyncTask.execute(mUserLogin);
+            ConnectivityManager manager =(ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo network = manager.getActiveNetworkInfo();
+            if(network == null || !network.isConnected()){
+                Toast.makeText(getContext(), R.string.toast_no_internet, Toast.LENGTH_SHORT).show();
+            }else {
+                mAsyncTask = new NetworkAsyncTask(this);
+                mAsyncTask.execute(mUserLogin);
+            }
         }
     }
 
@@ -107,6 +117,7 @@ public class MainActivityFragment extends Fragment implements NetworkAsyncTask.G
         mFollowers = followers;
         mAdapter.setFollowers(followers);
     }
+
 
 
     @Override

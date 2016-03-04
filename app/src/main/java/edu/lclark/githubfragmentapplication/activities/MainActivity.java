@@ -3,6 +3,7 @@ package edu.lclark.githubfragmentapplication.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,16 +14,20 @@ import android.widget.FrameLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import edu.lclark.githubfragmentapplication.GithubUserAsyncTask;
 import edu.lclark.githubfragmentapplication.R;
+import edu.lclark.githubfragmentapplication.fragments.LoginFragment;
 import edu.lclark.githubfragmentapplication.fragments.UserFragment;
 import edu.lclark.githubfragmentapplication.fragments.MainActivityFragment;
 import edu.lclark.githubfragmentapplication.models.GithubUser;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.FollowerSelectedListener, UserFragment.UserListener {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.FollowerSelectedListener, UserFragment.UserListener, GithubUserAsyncTask.OnLoginCompleteListener {
 
     @Bind(R.id.activity_main_framelayout)
     FrameLayout mFrameLayout;
 
+    @Bind(R.id.fab)
+    FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +38,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                mFab.setVisibility(View.GONE);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.activity_main_framelayout, new LoginFragment());
+                transaction.commit();
+//                if(getSupportActionBar() != null) {
+//                    getSupportActionBar().setTitle(R.string.app_title);
+//                }
             }
         });
 
+
+//        if(getSupportActionBar() != null) {
+//            getSupportActionBar().setTitle(R.string.app_title);
+//        }
+        mFab.setVisibility(View.GONE);
+        mFab.setImageResource(android.R.drawable.ic_input_add);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.activity_main_framelayout, new MainActivityFragment());
+        transaction.replace(R.id.activity_main_framelayout, new LoginFragment());
         transaction.commit();
 
 
@@ -73,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     @Override
     public void onFollowerSelected(GithubUser follower) {
+
+        mFab.setVisibility(View.VISIBLE);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.activity_main_framelayout, UserFragment.newInstance(follower));
         transaction.addToBackStack(null);
@@ -81,9 +100,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     @Override
     public void onUserFollowerButtonClicked(GithubUser user) {
+        mFab.setVisibility(View.VISIBLE);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.activity_main_framelayout, MainActivityFragment.newInstance(user));
         transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
+    @Override
+    public void onLoginComplete(GithubUser user) {
+        mFab.setVisibility(View.VISIBLE);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.activity_main_framelayout, UserFragment.newInstance(user));
         transaction.commit();
     }
 }
