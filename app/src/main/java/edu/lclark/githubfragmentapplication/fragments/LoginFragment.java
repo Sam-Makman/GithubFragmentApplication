@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,6 +34,10 @@ public class LoginFragment extends Fragment implements GithubUserAsyncTask.OnLog
     @Bind(R.id.login_fragment_button)
     Button mButton;
 
+    @Bind(R.id.login_fragment_image)
+    ImageView mImage;
+
+    public static final String IMAGEURL = "https://s-media-cache-ak0.pinimg.com/236x/2d/8e/e8/2d8ee815146390d567706f2c7b5c2916.jpg";
 
     GithubUserAsyncTask mAsyncTask;
 
@@ -50,7 +57,7 @@ public class LoginFragment extends Fragment implements GithubUserAsyncTask.OnLog
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, rootView);
 
-//        mButton.setOnClickListener();
+        Picasso.with(getContext()).load(IMAGEURL).fit().centerCrop().into(mImage);
 
         Log.d(TAG, "onCreateView");
 

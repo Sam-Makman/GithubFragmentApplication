@@ -1,34 +1,60 @@
- <RelativeLayout
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:padding="15dp">
+     <android.support.v7.widget.CardView
+         android:id="@+id/login_fragment_image_card"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="4dp"
+         cardview:cardCornerRadius="4dp"
+         cardview:cardElevation="4dp">
+    <ImageView
+        android:id="@+id/login_fragment_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:padding="15dp"
-     >
-    <TextView
-        android:id="@+id/login_fragment_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:text="@string/login"
         android:textAlignment="center"
-        android:textSize="36sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         />
+     </android.support.v7.widget.CardView>
+     <android.support.v7.widget.CardView
+
+         android:id="@+id/login_fragment_edit_text_card"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/login_fragment_image_card"
+         android:layout_margin="4dp"
+         cardview:cardCornerRadius="4dp"
+         cardview:cardElevation="4dp"
+         android:layout_marginTop="10dp"
+         android:layout_marginBottom="10dp">
     <EditText
         android:id="@+id/login_fragment_enter_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:layout_below="@id/login_fragment_title"
         android:hint="@string/enter_user_name"
         />
+     </android.support.v7.widget.CardView>
+     <android.support.v7.widget.CardView
+
+         android:id="@+id/login_fragment_button_card"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="4dp"
+         android:layout_below="@id/login_fragment_edit_text_card"
+
+         cardview:cardCornerRadius="4dp"
+         cardview:cardElevation="4dp">
      <Button
          android:id="@+id/login_fragment_button"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:text="@string/login_word"
-         android:layout_below="@id/login_fragment_enter_text"
-         android:layout_margin="30dp"
+          android:layout_marginTop="5dp"
+         android:layout_marginBottom="5dp"
          />
+     </android.support.v7.widget.CardView>
     </RelativeLayout>
