@@ -97,7 +97,7 @@ public class MainActivityFragment extends Fragment implements NetworkAsyncTask.G
             if(network == null || !network.isConnected()){
                 Toast.makeText(getContext(), R.string.toast_no_internet, Toast.LENGTH_SHORT).show();
             }else {
-                mAsyncTask = new NetworkAsyncTask(this);
+                mAsyncTask = new NetworkAsyncTask((NetworkAsyncTask.GithubListener)getContext());
                 mAsyncTask.execute(mUserLogin);
             }
         }

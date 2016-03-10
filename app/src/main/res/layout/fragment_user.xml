@@ -52,7 +52,7 @@
         android:id="@+id/fragment_user_user_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/user_button_text"
+        android:text="@string/tabbed_followers"
         />
 
 

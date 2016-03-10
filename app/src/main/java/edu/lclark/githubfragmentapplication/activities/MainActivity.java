@@ -1,6 +1,8 @@
 package edu.lclark.githubfragmentapplication.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -11,17 +13,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import edu.lclark.githubfragmentapplication.GithubUserAsyncTask;
+import edu.lclark.githubfragmentapplication.NetworkAsyncTask;
 import edu.lclark.githubfragmentapplication.R;
 import edu.lclark.githubfragmentapplication.fragments.LoginFragment;
 import edu.lclark.githubfragmentapplication.fragments.UserFragment;
 import edu.lclark.githubfragmentapplication.fragments.MainActivityFragment;
 import edu.lclark.githubfragmentapplication.models.GithubUser;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.FollowerSelectedListener, UserFragment.UserListener, GithubUserAsyncTask.OnLoginCompleteListener {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.FollowerSelectedListener, UserFragment.UserListener,
+        GithubUserAsyncTask.OnLoginCompleteListener, NetworkAsyncTask.GithubListener {
 
     @Bind(R.id.activity_main_framelayout)
     FrameLayout mFrameLayout;
@@ -29,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     @Bind(R.id.fab)
     FloatingActionButton mFab;
 
+    NetworkAsyncTask mNeworkTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,16 +55,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.activity_main_framelayout, new LoginFragment());
                 transaction.commit();
-//                if(getSupportActionBar() != null) {
-//                    getSupportActionBar().setTitle(R.string.app_title);
-//                }
             }
         });
 
 
-//        if(getSupportActionBar() != null) {
-//            getSupportActionBar().setTitle(R.string.app_title);
-//        }
         mFab.setVisibility(View.GONE);
         mFab.setImageResource(android.R.drawable.ic_input_add);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -90,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     @Override
     public void onFollowerSelected(GithubUser follower) {
-
         mFab.setVisibility(View.VISIBLE);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.activity_main_framelayout, UserFragment.newInstance(follower));
@@ -100,11 +101,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     @Override
     public void onUserFollowerButtonClicked(GithubUser user) {
-        mFab.setVisibility(View.VISIBLE);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.activity_main_framelayout, MainActivityFragment.newInstance(user));
-        transaction.addToBackStack(null);
-        transaction.commit();
+//        mFab.setVisibility(View.VISIBLE);
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.activity_main_framelayout, MainActivityFragment.newInstance(user));
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+        mNeworkTask = new NetworkAsyncTask(this);
+        mNeworkTask.execute(user.getLogin());
+
     }
 
 
@@ -114,5 +118,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.activity_main_framelayout, UserFragment.newInstance(user));
         transaction.commit();
+
+
+    }
+
+    @Override
+    public void onGithubFollowersRetrieved(@Nullable ArrayList<GithubUser> followers) {
+        if(followers == null){
+            Toast.makeText(this, R.string.cant_retrieve_followers, Toast.LENGTH_SHORT).show();
+        }else{
+            Intent intent = new Intent(MainActivity.this, TabbedUserActivity.class);
+            intent.putParcelableArrayListExtra(TabbedUserActivity.ARG_USERS, followers);
+            startActivity(intent);
+        }
     }
 }

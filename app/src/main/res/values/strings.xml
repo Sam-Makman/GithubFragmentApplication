@@ -12,4 +12,6 @@
     <string name="user_error">User Does Not Exist</string>
     <string name="toast_no_internet">Get An Internet</string>
     <string name="app_title">Github App</string>
+    <string name="cant_retrieve_followers">Cannot Retrieve Followers</string>
+    <string name="tabbed_followers">Get Tabbed Followers</string>
 </resources>

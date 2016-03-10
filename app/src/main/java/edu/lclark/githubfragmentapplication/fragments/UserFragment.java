@@ -1,5 +1,6 @@
 package edu.lclark.githubfragmentapplication.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,16 +24,18 @@ import edu.lclark.githubfragmentapplication.models.GithubUser;
 /**
  * Created by ntille on 2/25/16.
  */
-public class UserFragment extends Fragment {
+public class UserFragment extends Fragment{
 
     public static final String ARG_USER = "UserFragment.User";
     private GithubUser mUser;
     private UserListener mUserListener;
+    private ArrayList<GithubUser> mUserList;
 
     @Bind(R.id.fragment_user_imageview)
     ImageView mImageView;
     @Bind(R.id.fragment_user_name_textview)
     TextView mNameTextView;
+
 
 
     public interface UserListener {
@@ -54,13 +59,13 @@ public class UserFragment extends Fragment {
 
         mUser = getArguments().getParcelable(ARG_USER);
         assert mUser != null;
-        getActivity().setTitle(mUser.getLogin());
+//        getActivity().setTitle(mUser.getLogin());
 
         Picasso.with(getContext()).load(mUser.getAvatar_url()).fit().centerInside().into(mImageView);
 
         mNameTextView.setText(mUser.getLogin());
 
-        mUserListener = (MainActivity) getActivity();
+        mUserListener = (UserListener) getActivity();
 
         return rootView;
     }
@@ -69,6 +74,6 @@ public class UserFragment extends Fragment {
 
     @OnClick(R.id.fragment_user_user_button)
     public void onFollowerButtonClick() {
-        mUserListener.onUserFollowerButtonClicked(mUser);
+            mUserListener.onUserFollowerButtonClicked(mUser);
     }
 }
