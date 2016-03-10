@@ -1,10 +1,12 @@
 package edu.lclark.githubfragmentapplication.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -24,10 +26,9 @@ import edu.lclark.githubfragmentapplication.NetworkAsyncTask;
 import edu.lclark.githubfragmentapplication.R;
 import edu.lclark.githubfragmentapplication.fragments.LoginFragment;
 import edu.lclark.githubfragmentapplication.fragments.UserFragment;
-import edu.lclark.githubfragmentapplication.fragments.MainActivityFragment;
 import edu.lclark.githubfragmentapplication.models.GithubUser;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.FollowerSelectedListener, UserFragment.UserListener,
+public class MainActivity extends AppCompatActivity implements  UserFragment.UserListener,
         GithubUserAsyncTask.OnLoginCompleteListener, NetworkAsyncTask.GithubListener {
 
     @Bind(R.id.activity_main_framelayout)
@@ -90,25 +91,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFollowerSelected(GithubUser follower) {
-        mFab.setVisibility(View.VISIBLE);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.activity_main_framelayout, UserFragment.newInstance(follower));
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 
     @Override
     public void onUserFollowerButtonClicked(GithubUser user) {
-//        mFab.setVisibility(View.VISIBLE);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.activity_main_framelayout, MainActivityFragment.newInstance(user));
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-        mNeworkTask = new NetworkAsyncTask(this);
-        mNeworkTask.execute(user.getLogin());
-
+        ConnectivityManager manager =(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo network = manager.getActiveNetworkInfo();
+        if(network == null || !network.isConnected()){
+            Toast.makeText(this, R.string.toast_no_internet, Toast.LENGTH_SHORT).show();
+        }else {
+            mNeworkTask = new NetworkAsyncTask(this);
+            mNeworkTask.execute(user.getLogin());
+        }
     }
 
 
@@ -120,6 +113,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         transaction.commit();
 
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(!mNeworkTask.isCancelled()){
+            mNeworkTask.cancel(true);
+        }
     }
 
     @Override

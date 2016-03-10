@@ -23,8 +23,6 @@ public class TabbedUserActivity extends AppCompatActivity implements UserFragmen
 {
     public static final String TAG = TabbedUserActivity.class.getSimpleName();
     public static final String ARG_USERS = "USER_ARGUMENT";
-    @Bind(R.id.activity_tabbed_user_toolbar)
-    Toolbar mToolbar;
 
     @Bind(R.id.activity_tabbed_user_tabLayout)
     TabLayout mTabLayout;
@@ -49,10 +47,6 @@ public class TabbedUserActivity extends AppCompatActivity implements UserFragmen
         mTabLayout.setupWithViewPager(mViewPager);
 
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-//        setSupportActionBar(mToolbar);
-
-//        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.act)
     }
 
     @Override

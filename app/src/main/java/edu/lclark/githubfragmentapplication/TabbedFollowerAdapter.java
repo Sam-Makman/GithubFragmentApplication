@@ -13,10 +13,10 @@ import edu.lclark.githubfragmentapplication.models.GithubUser;
 public class TabbedFollowerAdapter extends FragmentPagerAdapter {
 
     ArrayList<GithubUser> mUsers;
+
     public TabbedFollowerAdapter(ArrayList<GithubUser> users, FragmentManager fm){
         super(fm);
         mUsers = users;
-
     }
 
     @Override
@@ -27,5 +27,10 @@ public class TabbedFollowerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return mUsers.size();
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mUsers.get(position).getLogin();
     }
 }
